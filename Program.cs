@@ -64,7 +64,11 @@ class Application
             maxCalories = currentCalories;
         }
 
-        Decimal result = allCaloriesList.OrderBy(inP => -inP).Take(3).Sum();
+        List<Decimal> top3 = allCaloriesList.OrderBy(inP => -inP).Take(3).ToList();
+        foreach (var top in top3){
+            Console.WriteLine(top);
+        }
+        Decimal result = top3.Sum();
         Console.WriteLine($"Calories carried by the 3 elves with the most by List: {result}");
         Console.Write("Press any key to exit.");
         Console.ReadKey();
