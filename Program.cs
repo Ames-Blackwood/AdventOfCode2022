@@ -12,31 +12,15 @@ static IHostBuilder CreateHostBuilder(string[] args)
     return Host.CreateDefaultBuilder(args)
         .ConfigureServices(
             (_, services) => services
-                .AddSingleton<Application, Application>()
-                .AddSingleton<IAppConfig, AppConfig>());
-}
-
-interface IAppConfig
-{
-    string Setting { get; }
-}
-
-class AppConfig : IAppConfig
-{
-    public string Setting { get; }
-
-    public AppConfig(ILogger<AppConfig> logger)
-    {
-        logger.Log(LogLevel.Information, "AppConfig constructed");
-    }
+                .AddSingleton<Application, Application>());
 }
 
 class Application
 {
-    readonly IAppConfig config;
-    public Application(IAppConfig config, ILogger<Application> logger)
+    private ILogger<Application> _logger;
+    public Application(ILogger<Application> logger)
     {
-        this.config = config;
-        logger.Log(LogLevel.Information, "Application constructed");
+        _logger = logger;
+        _logger.Log(LogLevel.Information, "Application constructed");
     }
 }
