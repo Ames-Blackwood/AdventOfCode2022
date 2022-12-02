@@ -35,7 +35,6 @@ class Application
         int currentElf = 1;
         decimal value;
         bool isValue;
-        Stack<decimal> topCalories = new Stack<decimal>();
         List<decimal> allCaloriesList = new List<decimal>();
 
         foreach (var line in lines)
@@ -49,7 +48,6 @@ class Application
                 {
                     maxCarryingElf = currentElf;
                     maxCalories = currentCalories;
-                    topCalories.Push(maxCalories);
                 }
                 currentElf++;
                 currentCalories = 0;
@@ -64,33 +62,11 @@ class Application
         {
             maxCarryingElf = currentElf;
             maxCalories = currentCalories;
-            topCalories.Push(maxCalories);
         }
 
-        Decimal result;
-        result = SumTopThree(topCalories);
-        Decimal result1 = allCaloriesList.OrderBy(inP => -inP).Take(3).Sum();
-        Console.WriteLine($"Calories carried by the 3 elves with the most by stack: {result}");
-        Console.WriteLine($"Calories carried by the 3 elves with the most by List: {result1}");
+        Decimal result = allCaloriesList.OrderBy(inP => -inP).Take(3).Sum();
+        Console.WriteLine($"Calories carried by the 3 elves with the most by List: {result}");
         Console.Write("Press any key to exit.");
         Console.ReadKey();
-    }
-
-    private Decimal SumTopThree(Stack<Decimal> inP)
-    {
-        var flagIncluded = (int count) => count < 3 ? "*" : "";
-        Decimal result = 0;
-        int count = 0;
-        Decimal tmp;
-        while (inP.TryPop(out tmp))
-        {
-            _logger.LogInformation($"{tmp}{flagIncluded(count)}");
-            if (count < 3)
-            {
-                result +=tmp;
-                count ++;
-            }
-        }
-        return result;
     }
 }
