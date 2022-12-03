@@ -8,12 +8,13 @@ namespace Advent.Logic
         {
         }
 
-        public void EvaluateStrategy(string? value)
+        public Strategy EvaluateStrategy(string? value)
         {
             Strategy strategy = new Strategy();
             strategy.Code = value;
             Decode(strategy);
             Score(strategy);            
+            return strategy;
         }
 
         private void Decode(Strategy strategy)

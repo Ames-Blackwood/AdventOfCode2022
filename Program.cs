@@ -24,19 +24,22 @@ static IHostBuilder CreateHostBuilder(string[] args)
 class Application
 {
     private ILogger<Application> _logger;
-    public Application(ILogger<Application> logger)
+    private RockPaperScissorsLogic _rockPaperScissorsLogic;
+    public Application(ILogger<Application> logger, RockPaperScissorsLogic rockPaperScissorsLogic)
     {
         _logger = logger;
+        _rockPaperScissorsLogic = rockPaperScissorsLogic;
     }
 
     public void Process()
     {
         string[] lines = System.IO.File.ReadAllLines(@"./IO/input.txt");
-
+        Decimal total = 0;
         foreach (var line in lines)
         {
+            total += (Decimal) _rockPaperScissorsLogic.EvaluateStrategy(line).StrategyScore;
         }
-
+        Console.WriteLine($"The total score was {total}.");
         Console.Write("Press any key to exit.");
         Console.ReadKey();
     }
