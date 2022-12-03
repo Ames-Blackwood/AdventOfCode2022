@@ -13,12 +13,22 @@ app.Process();
 
 static IHostBuilder CreateHostBuilder(string[] args)
 {
+    Config.Configure(args);
     return Host.CreateDefaultBuilder(args)
         .ConfigureServices(
             (_, services) => services
                 .AddSingleton<Application, Application>()
                 .AddSingleton<RockPaperScissorsLogic, RockPaperScissorsLogic>()
         );
+}
+
+static class Config
+{
+    public static bool TestData { get; set; }
+    public static void Configure(string[] args)
+    {
+        TestData = args.Any(a => a == "-t");
+    }
 }
 
 class Application
@@ -33,7 +43,7 @@ class Application
 
     public void Process()
     {
-        string[] lines = System.IO.File.ReadAllLines(@"./IO/input.txt");
+        string[] lines = System.IO.File.ReadAllLines(Config.TestData ? @"./IO/testinput.txt" : @"./IO/input.txt");
         Decimal total = 0;
         foreach (var line in lines)
         {
