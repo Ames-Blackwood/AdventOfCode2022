@@ -4,6 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using Advent.Models;
+using Advent.Logic;
 
 var host = CreateHostBuilder(args).Build();
 
@@ -15,7 +16,9 @@ static IHostBuilder CreateHostBuilder(string[] args)
     return Host.CreateDefaultBuilder(args)
         .ConfigureServices(
             (_, services) => services
-                .AddSingleton<Application, Application>());
+                .AddSingleton<Application, Application>()
+                .AddSingleton<RockPaperScissorsLogic, RockPaperScissorsLogic>()
+        );
 }
 
 class Application
