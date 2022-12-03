@@ -10,10 +10,10 @@ namespace Advent.Logic
             {"C", RockPaperScissorsEnum.Scissors}
         };
 
-        public static IDictionary<string, RockPaperScissorsEnum> MapPlayerAction = new Dictionary<string, RockPaperScissorsEnum>{
-            {"X", RockPaperScissorsEnum.Rock},
-            {"Y", RockPaperScissorsEnum.Paper},
-            {"Z", RockPaperScissorsEnum.Scissors}
+        public static IDictionary<string, WinLoseDrawEnum> MapDesiredResult = new Dictionary<string, WinLoseDrawEnum>{
+            {"X", WinLoseDrawEnum.Lose},
+            {"Y", WinLoseDrawEnum.Draw},
+            {"Z", WinLoseDrawEnum.Win}
         };
     }
 }

@@ -21,17 +21,18 @@ namespace Advent.Logic
         {
             if (strategy.Code is not null && strategy.Code.Length == 3)
             {
-                RockPaperScissorsEnum tmp;
-                if (Maps.MapOpponentAction.TryGetValue(strategy.Code.Substring(0,1), out tmp)) strategy.OpponentAction = tmp;
-                if (Maps.MapPlayerAction.TryGetValue(strategy.Code.Substring(2,1), out tmp)) strategy.PlayerAction = tmp;
+                RockPaperScissorsEnum tmpOpponentAction;
+                if (Maps.MapOpponentAction.TryGetValue(strategy.Code.Substring(0,1), out tmpOpponentAction)) strategy.OpponentAction = tmpOpponentAction;
+                WinLoseDrawEnum tmpDesiredOutcome;
+                if (Maps.MapDesiredResult.TryGetValue(strategy.Code.Substring(2,1), out tmpDesiredOutcome)) strategy.DesiredOutcome = tmpDesiredOutcome;
             }
         }
 
         private void Score(Strategy strategy)
         {
-            if (strategy.OpponentAction is not null && strategy.PlayerAction is not null)
+            if (strategy.OpponentAction is not null && strategy.DesiredOutcome is not null)
             {
-                strategy.StrategyScore = Calculations.StrategyValue(strategy.OpponentAction, strategy.PlayerAction);
+                strategy.StrategyScore = Calculations.StrategyValueFromDesiredOutcome(strategy.OpponentAction, strategy.DesiredOutcome);
             }
         }
     }
