@@ -54,6 +54,10 @@ class Application
         }
         Console.WriteLine($"The total score was {total}.");
         Console.Write("Press any key to exit.");
-        Console.ReadKey();
+        try 
+        {
+            Console.ReadKey();
+        }
+        catch {}
     }
 }
