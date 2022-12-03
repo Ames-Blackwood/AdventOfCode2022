@@ -43,7 +43,10 @@ class Application
 
     public void Process()
     {
-        string[] lines = System.IO.File.ReadAllLines(Config.TestData ? @"./IO/testinput.txt" : @"./IO/input.txt");
+        string dataFile = Config.TestData ? @"./IO/testinput.txt" : @"./IO/input.txt";
+        _logger.LogInformation($"TestData: {Config.TestData}");
+        _logger.LogInformation($"Data file to use: {dataFile}");
+        string[] lines = System.IO.File.ReadAllLines(dataFile);
         Decimal total = 0;
         foreach (var line in lines)
         {
