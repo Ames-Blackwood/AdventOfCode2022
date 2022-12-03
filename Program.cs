@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Linq;
+using Advent.Models;
 
 var host = CreateHostBuilder(args).Build();
 
@@ -27,7 +28,7 @@ class Application
 
     public void Process()
     {
-        string[] lines = System.IO.File.ReadAllLines(@"./input.txt");
+        string[] lines = System.IO.File.ReadAllLines(@"./IO/input.txt");
 
         foreach (var line in lines)
         {
