@@ -8,6 +8,11 @@ namespace Advent.Logic
         {
         }
 
+        public bool DecodeAndDetermineFullInclusion(string codedString)
+        {
+            return false;            
+        }
+
         public bool DetermineFullInclusion(Coordinate[] elfPair)
         {
             
