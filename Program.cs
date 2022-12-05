@@ -17,7 +17,7 @@ static IHostBuilder CreateHostBuilder(string[] args)
         .ConfigureServices(
             (_, services) => services
                 .AddSingleton<Application, Application>()
-                .AddSingleton<RucksackLogic, RucksackLogic>()
+                .AddSingleton<SectionLogic, SectionLogic>()
         );
 }
 
@@ -34,8 +34,8 @@ static class Config
 class Application
 {
     private ILogger<Application> _logger;
-    private RucksackLogic _rucksackLogic;
-    public Application(ILogger<Application> logger, RucksackLogic rucksackLogic)
+    private SectionLogic _rucksackLogic;
+    public Application(ILogger<Application> logger, SectionLogic rucksackLogic)
     {
         _logger = logger;
         _rucksackLogic = rucksackLogic;
@@ -52,12 +52,7 @@ class Application
         
         foreach (var line in lines)
         {
-            buffer.Add(line);
-            if (buffer.Count >= 3)
-            {
-                total += (Decimal) _rucksackLogic.FindPriorityOfBadge(buffer);
-                buffer = new List<string>();
-            }
+            total += (Decimal) 1;
         }
         
         Console.WriteLine($"The total score was {total}.");
