@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Linq;
-using Advent.Models;
 using Advent.Logic;
 
 var host = CreateHostBuilder(args).Build();
@@ -18,13 +17,14 @@ static IHostBuilder CreateHostBuilder(string[] args)
         .ConfigureServices(
             (_, services) => services
                 .AddSingleton<Application, Application>()
-                .AddSingleton<RockPaperScissorsLogic, RockPaperScissorsLogic>()
+                .AddSingleton<RucksackLogic, RucksackLogic>()
         );
 }
 
 static class Config
 {
     public static bool TestData { get; set; }
+    public static LogLevel logLevel { get; set; }
     public static void Configure(string[] args)
     {
         TestData = args.Any(a => a == "-t");
@@ -34,11 +34,11 @@ static class Config
 class Application
 {
     private ILogger<Application> _logger;
-    private RockPaperScissorsLogic _rockPaperScissorsLogic;
-    public Application(ILogger<Application> logger, RockPaperScissorsLogic rockPaperScissorsLogic)
+    private RucksackLogic _rucksackLogic;
+    public Application(ILogger<Application> logger, RucksackLogic rucksackLogic)
     {
         _logger = logger;
-        _rockPaperScissorsLogic = rockPaperScissorsLogic;
+        _rucksackLogic = rucksackLogic;
     }
 
     public void Process()
@@ -50,7 +50,7 @@ class Application
         Decimal total = 0;
         foreach (var line in lines)
         {
-            total += (Decimal) _rockPaperScissorsLogic.EvaluateStrategy(line).StrategyScore;
+            total += (Decimal) _rucksackLogic.FindPriorityOfDuplicates(line);
         }
         Console.WriteLine($"The total score was {total}.");
         Console.Write("Press any key to exit.");
