@@ -6,23 +6,20 @@ namespace Advent.Logic
         {
         }
 
-        public int FindPriorityOfDuplicates(string rucksackContents){
+        public int FindPriorityOfBadge(List<string> rucksacks){
             
-            if (rucksackContents is null) throw new ArgumentNullException(nameof(rucksackContents));
+            if (rucksacks is null) throw new ArgumentNullException(nameof(rucksacks));
+            if (rucksacks.Count != 3) throw new ArgumentOutOfRangeException(nameof(rucksacks));
                        
-            int totalItems = rucksackContents.Trim().Length;
-            
-            if (totalItems % 2 != 0) throw new ArgumentOutOfRangeException(nameof(rucksackContents));
+            char[][] characterArrayRucksacks = rucksacks.Select(i => i.ToCharArray()).ToArray();
+            char? badge = characterArrayRucksacks[0]
+                .Intersect(characterArrayRucksacks[1])
+                .Intersect(characterArrayRucksacks[2])
+                .First();
 
-            int compartmentSize = totalItems / 2;
-            char[] compartment1 = rucksackContents.Substring(0,compartmentSize).ToCharArray();
-            char[] compartment2 = rucksackContents.Substring(compartmentSize).ToCharArray();
-
-            char? duplicate = compartment1.Intersect(compartment2).First();
-            
-            return duplicate is null
+            return badge is null
                 ? 0
-                : Calculations.CalculatePriority(duplicate);
+                : Calculations.CalculatePriority(badge);
         }
     }
 }

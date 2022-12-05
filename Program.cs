@@ -48,10 +48,18 @@ class Application
         _logger.LogInformation($"Data file to use: {dataFile}");
         string[] lines = System.IO.File.ReadAllLines(dataFile);
         Decimal total = 0;
+        List<string> buffer = new List<string>();
+        
         foreach (var line in lines)
         {
-            total += (Decimal) _rucksackLogic.FindPriorityOfDuplicates(line);
+            buffer.Add(line);
+            if (buffer.Count >= 3)
+            {
+                total += (Decimal) _rucksackLogic.FindPriorityOfBadge(buffer);
+                buffer = new List<string>();
+            }
         }
+        
         Console.WriteLine($"The total score was {total}.");
         Console.Write("Press any key to exit.");
         try 
