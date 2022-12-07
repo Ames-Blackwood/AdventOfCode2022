@@ -9,7 +9,8 @@ namespace Advent.Extensions
         }
         public static bool Overlaps (this Coordinate input, Coordinate test){
             return (input.Min <= test.Min && input.Max >= test.Min)
-                || (input.Min <= test.Max && input.Max >= test.Max);
+                || (input.Min <= test.Max && input.Max >= test.Max)
+                || (test.Contains(input));
         }
     }
 }

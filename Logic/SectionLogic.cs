@@ -6,8 +6,8 @@ namespace Advent.Logic
 {
     public class SectionLogic 
     {
-        private readonly ILogger _logger;
-        public SectionLogic(ILogger logger)
+        private readonly ILogger<SectionLogic> _logger;
+        public SectionLogic(ILogger<SectionLogic> logger)
         {
             _logger = logger;
         }
@@ -15,10 +15,18 @@ namespace Advent.Logic
         public bool DecodeAndDetermineFullInclusion(string codedString)
         {
             var result = DetermineOverlap(Decode(codedString));
-            _logger.LogInformation ($"{codedString}: {(result ? "OVERLAP" : "")}");
+            var testResult = DetermineFullInclusion(Decode(codedString));
+            _logger.LogInformation ($"{(result ? "OVERLAP" : ""):6}: {(testResult ? "CONTAINS" : ""):8}: {codedString}");
             return result;
         }
 
+        private bool DetermineFullInclusion(Coordinate[] elfPair)
+        {
+            if (elfPair is null) throw new ArgumentNullException(nameof(elfPair));
+            if (elfPair.Length != 2) throw new ArgumentOutOfRangeException(nameof(elfPair));
+
+            return elfPair[0].Contains(elfPair[1]) || elfPair[1].Contains(elfPair[0]);
+        }
         private bool DetermineOverlap(Coordinate[] elfPair)
         {
             if (elfPair is null) throw new ArgumentNullException(nameof(elfPair));
