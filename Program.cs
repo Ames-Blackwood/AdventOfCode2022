@@ -17,7 +17,7 @@ static IHostBuilder CreateHostBuilder(string[] args)
         .ConfigureServices(
             (_, services) => services
                 .AddSingleton<Application, Application>()
-                .AddSingleton<SectionLogic, SectionLogic>()
+                .AddSingleton<CrateStackLogic, CrateStackLogic>()
         );
 }
 
@@ -34,11 +34,11 @@ static class Config
 class Application
 {
     private ILogger<Application> _logger;
-    private SectionLogic _sectionLogic;
-    public Application(ILogger<Application> logger, SectionLogic sectionLogic)
+    private CrateStackLogic _CrateStackLogic;
+    public Application(ILogger<Application> logger, CrateStackLogic CrateStackLogic)
     {
         _logger = logger;
-        _sectionLogic = sectionLogic;
+        _CrateStackLogic = CrateStackLogic;
     }
 
     public void Process()
@@ -52,7 +52,7 @@ class Application
         
         foreach (var line in lines)
         {
-            total += (Decimal) (_sectionLogic.DecodeAndDetermineFullInclusion(line) ? 1 : 0);
+            total += (Decimal) 1;
         }
         
         Console.WriteLine($"The total score was {total}.");
