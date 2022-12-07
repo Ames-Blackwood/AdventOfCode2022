@@ -1,17 +1,22 @@
 using Advent.Models;
 using Advent.Extensions;
+using Microsoft.Extensions.Logging;
 
 namespace Advent.Logic 
 {
     public class SectionLogic 
     {
-        public SectionLogic()
+        private readonly ILogger _logger;
+        public SectionLogic(ILogger logger)
         {
+            _logger = logger;
         }
 
         public bool DecodeAndDetermineFullInclusion(string codedString)
         {
-            return DetermineOverlap(Decode(codedString));
+            var result = DetermineOverlap(Decode(codedString));
+            _logger.LogInformation ($"{codedString}: {(result ? "OVERLAP" : "")}");
+            return result;
         }
 
         private bool DetermineOverlap(Coordinate[] elfPair)
