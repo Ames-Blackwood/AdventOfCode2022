@@ -11,15 +11,15 @@ namespace Advent.Logic
 
         public bool DecodeAndDetermineFullInclusion(string codedString)
         {
-            return DetermineFullInclusion(Decode(codedString));
+            return DetermineOverlap(Decode(codedString));
         }
 
-        private bool DetermineFullInclusion(Coordinate[] elfPair)
+        private bool DetermineOverlap(Coordinate[] elfPair)
         {
             if (elfPair is null) throw new ArgumentNullException(nameof(elfPair));
             if (elfPair.Length != 2) throw new ArgumentOutOfRangeException(nameof(elfPair));
 
-            return elfPair[0].Contains(elfPair[1]) || elfPair[1].Contains(elfPair[0]);
+            return elfPair[0].Overlaps(elfPair[1]);
         }
 
 
