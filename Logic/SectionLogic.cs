@@ -16,7 +16,7 @@ namespace Advent.Logic
         {
             var result = DetermineOverlap(Decode(codedString));
             var testResult = DetermineFullInclusion(Decode(codedString));
-            _logger.LogInformation ($"{(result ? "OVERLAP" : ""):6}: {(testResult ? "CONTAINS" : ""):8}: {codedString}");
+
             return result;
         }
 
