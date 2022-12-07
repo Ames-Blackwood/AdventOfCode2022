@@ -34,11 +34,11 @@ static class Config
 class Application
 {
     private ILogger<Application> _logger;
-    private SectionLogic _rucksackLogic;
-    public Application(ILogger<Application> logger, SectionLogic rucksackLogic)
+    private SectionLogic _sectionLogic;
+    public Application(ILogger<Application> logger, SectionLogic sectionLogic)
     {
         _logger = logger;
-        _rucksackLogic = rucksackLogic;
+        _sectionLogic = sectionLogic;
     }
 
     public void Process()
@@ -52,7 +52,7 @@ class Application
         
         foreach (var line in lines)
         {
-            total += (Decimal) 1;
+            total += (Decimal) (_sectionLogic.DecodeAndDetermineFullInclusion(line) ? 1 : 0);
         }
         
         Console.WriteLine($"The total score was {total}.");

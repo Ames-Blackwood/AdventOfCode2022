@@ -1,4 +1,5 @@
 using Advent.Models;
+using Advent.Extensions;
 
 namespace Advent.Logic 
 {
@@ -10,16 +11,37 @@ namespace Advent.Logic
 
         public bool DecodeAndDetermineFullInclusion(string codedString)
         {
-            return false;            
+            return DetermineFullInclusion(Decode(codedString));
         }
 
-        public bool DetermineFullInclusion(Coordinate[] elfPair)
+        private bool DetermineFullInclusion(Coordinate[] elfPair)
         {
-            
             if (elfPair is null) throw new ArgumentNullException(nameof(elfPair));
             if (elfPair.Length != 2) throw new ArgumentOutOfRangeException(nameof(elfPair));
 
-            return false;               
+            return elfPair[0].Contains(elfPair[1]) || elfPair[1].Contains(elfPair[0]);
+        }
+
+
+
+        private Coordinate[] Decode(string codedString)
+        {
+            if (codedString == null) throw new ArgumentNullException(nameof(codedString));
+            Coordinate[] elfPair = new Coordinate[2];
+            
+            var stringPair = codedString.Split(',');
+            if (stringPair.Length != 2) throw new ArgumentOutOfRangeException(nameof(codedString));
+
+            var minMax1 = stringPair[0].Split('-');
+            if (minMax1.Length != 2) throw new ArgumentOutOfRangeException(nameof(codedString));
+
+            var minMax2 = stringPair[1].Split('-');
+            if (minMax2.Length != 2) throw new ArgumentOutOfRangeException(nameof(codedString));
+
+            return new Coordinate[2] {
+                new Coordinate { Min=int.Parse(minMax1[0]), Max=int.Parse(minMax1[1]) },
+                new Coordinate { Min=int.Parse(minMax2[0]), Max=int.Parse(minMax2[1]) }
+            };
         }
     }
 }
