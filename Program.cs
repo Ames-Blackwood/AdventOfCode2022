@@ -59,7 +59,6 @@ class Application
                 {
                     readingStackBlock = false;
                     _CrateStackLogic.ModelStack(buffer);
-                    break;
                 }
                 else
                 {
