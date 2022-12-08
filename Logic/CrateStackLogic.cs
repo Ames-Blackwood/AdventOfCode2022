@@ -44,7 +44,18 @@ namespace Advent.Logic
 
         public void UpdateStack(string instruction)
         {
-            throw new NotImplementedException();
+            if (instruction is null || instruction == "") throw new ArgumentNullException(nameof(instruction));
+            if (_stacks is null) throw new ArgumentNullException(nameof(_stacks));
+
+            var splitInstruction = instruction.Split(" ");
+            var count = int.Parse(splitInstruction[1]);
+            var fromIndex = int.Parse(splitInstruction[3]) - 1;
+            var toIndex = int.Parse(splitInstruction[5]) - 1;
+
+            for (var i = 0; i < count; i++)
+            {
+                _stacks[toIndex].Push(_stacks[fromIndex].Pop());
+            }
         }
 
         public string GetTopItems()
