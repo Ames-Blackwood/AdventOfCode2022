@@ -1,3 +1,4 @@
+using System.Text;
 using Microsoft.Extensions.Logging;
 
 namespace Advent.Logic 
@@ -6,7 +7,7 @@ namespace Advent.Logic
     {
         private readonly ILogger<CrateStackLogic> _logger;
 
-        private Stack<string>[] _stacks = null;
+        private Stack<string>[]? _stacks;
         private int _stackCount = 0;
         public CrateStackLogic(ILogger<CrateStackLogic> logger)
         {
@@ -29,6 +30,10 @@ namespace Advent.Logic
                     _stackCount = int.Parse(stackCountString);
 
                     _stacks = new Stack<string>[_stackCount];
+                    for (var i = 0; i < _stackCount; i++)
+                    {
+                        _stacks[i] = new Stack<string>();
+                    }
                 }
                 else
                 {
@@ -44,12 +49,30 @@ namespace Advent.Logic
 
         public string GetTopItems()
         {
-            throw new NotImplementedException();
+            if (_stacks is null) throw new ArgumentNullException(nameof(_stacks));
+
+            var aggregator = new StringBuilder();
+            for (var i = 0; i < _stackCount; i++)
+            {
+                var success = _stacks[i].TryPeek(out var item);
+                aggregator.Append(success ? item : " ");
+            }
+            return aggregator.ToString();
         }
 
         private void StackRow(string row)
         {
-            throw new NotImplementedException();
+            if (_stacks is null) throw new ArgumentNullException(nameof(_stacks));
+
+            for (var i = 0; i < _stackCount; i++)
+            {
+                var item = row.Substring(GetPositionFromIndex(i),1).Trim();
+                if (item != ""){
+                    _stacks[i].Push(item);
+                }
+            }
         }
+
+        private int GetPositionFromIndex(int index) => ((index + 1) * 4) - 3;
     }
 }
