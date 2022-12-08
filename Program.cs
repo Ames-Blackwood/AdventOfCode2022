@@ -47,15 +47,32 @@ class Application
         _logger.LogInformation($"TestData: {Config.TestData}");
         _logger.LogInformation($"Data file to use: {dataFile}");
         string[] lines = System.IO.File.ReadAllLines(dataFile);
-        Decimal total = 0;
+
         List<string> buffer = new List<string>();
+
+        var readingStackBlock = true;
         
         foreach (var line in lines)
         {
-            total += (Decimal) 1;
+            if (readingStackBlock) {
+                if (line == "")
+                {
+                    readingStackBlock = false;
+                    _CrateStackLogic.ModelStack(buffer);
+                }
+                else
+                {
+                    buffer.Add(line);
+                }
+            }
+            else
+            {
+                _CrateStackLogic.UpdateStack(line);
+            }
         }
+        var output = _CrateStackLogic.GetTopItems();
         
-        Console.WriteLine($"The total score was {total}.");
+        Console.WriteLine($"The top items on each stack in order are \"{output}\".");
         Console.Write("Press any key to exit.");
         try 
         {

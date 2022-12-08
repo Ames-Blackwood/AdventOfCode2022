@@ -9,5 +9,20 @@ namespace Advent.Logic
         {
             _logger = logger;
         }
+
+        public void ModelStack(List<string> stackBuffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateStack(string instruction)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetTopItems()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
