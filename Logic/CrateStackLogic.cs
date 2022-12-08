@@ -52,9 +52,16 @@ namespace Advent.Logic
             var fromIndex = int.Parse(splitInstruction[3]) - 1;
             var toIndex = int.Parse(splitInstruction[5]) - 1;
 
+            var tmp = new Stack<string>();
+
             for (var i = 0; i < count; i++)
             {
-                _stacks[toIndex].Push(_stacks[fromIndex].Pop());
+                tmp.Push(_stacks[fromIndex].Pop());
+            }
+
+            for (var i = 0; i < count; i++)
+            {
+                _stacks[toIndex].Push(tmp.Pop());
             }
         }
 
