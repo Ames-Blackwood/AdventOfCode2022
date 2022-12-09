@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Linq;
-using Advent.Logic;
 
 var host = CreateHostBuilder(args).Build();
 
@@ -17,7 +16,6 @@ static IHostBuilder CreateHostBuilder(string[] args)
         .ConfigureServices(
             (_, services) => services
                 .AddSingleton<Application, Application>()
-                .AddSingleton<CrateStackLogic, CrateStackLogic>()
         );
 }
 
@@ -34,11 +32,9 @@ static class Config
 class Application
 {
     private ILogger<Application> _logger;
-    private CrateStackLogic _CrateStackLogic;
-    public Application(ILogger<Application> logger, CrateStackLogic CrateStackLogic)
+    public Application(ILogger<Application> logger)
     {
         _logger = logger;
-        _CrateStackLogic = CrateStackLogic;
     }
 
     public void Process()
@@ -46,33 +42,29 @@ class Application
         string dataFile = Config.TestData ? @"./IO/testinput.txt" : @"./IO/input.txt";
         _logger.LogInformation($"TestData: {Config.TestData}");
         _logger.LogInformation($"Data file to use: {dataFile}");
-        string[] lines = System.IO.File.ReadAllLines(dataFile);
-
-        List<string> buffer = new List<string>();
-
-        var readingStackBlock = true;
         
-        foreach (var line in lines)
+        StreamReader reader = new StreamReader(dataFile);
+
+        int position = 0;
+        var markerFound = false;        
+        List<char> evalList = new List<char>();
+        var listCount = 0;
+
+        while (!markerFound && reader.Peek() >= 0)
         {
-            if (readingStackBlock) {
-                if (line == "")
-                {
-                    readingStackBlock = false;
-                    _CrateStackLogic.ModelStack(buffer);
-                }
-                else
-                {
-                    buffer.Add(line);
-                }
-            }
-            else
+            position++;
+            evalList.Add((char)reader.Read());
+            listCount = evalList.Count();
+            if (listCount >= 4)
             {
-                _CrateStackLogic.UpdateStack(line);
+                if (listCount > 4) evalList.RemoveRange(0,listCount-4);
+                if (evalList.Distinct().Count() == 4 ) markerFound = true;
             }
         }
-        var output = _CrateStackLogic.GetTopItems();
+
+        reader.Close();
         
-        Console.WriteLine($"The top items on each stack in order are \"{output}\".");
+        Console.WriteLine($"The first start-of-packet marker is at \"{position}\".");
         Console.Write("Press any key to exit.");
         try 
         {
