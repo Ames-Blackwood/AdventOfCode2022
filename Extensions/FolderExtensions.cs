@@ -4,14 +4,22 @@ namespace Advent.Extensions
 {
     public static class FolderExtensions
     {
-        public static bool TryAddFolder(this Folder parent, string newFolderName)
+        public static bool TryAddFolder(this Folder current, string newFolderName)
         {
-            return parent.Folders.TryAdd(newFolderName, new Folder { Parent = parent });
+            return current.Folders.TryAdd(newFolderName, new Folder { Parent = current });
         }
 
-        public static bool TryAddFile(this Folder parent, string newFileName, decimal size)
+        public static bool TryAddFile(this Folder current, string newFileName, decimal size)
         {
-            return parent.Files.TryAdd(newFileName, size);
+            return current.Files.TryAdd(newFileName, size);
+        }
+
+        public static decimal GetSize(this Folder current)
+        {
+            var fileSize = current.Files.Values.Sum();
+            var folderSize = current.Folders.Select(i => i.GetSize()).Sum();
+
+            return fileSize + folderSize;
         }
     }
 }
