@@ -28,8 +28,35 @@ namespace Advent.Logic
 
         private bool TryParseCommandEntry(string entry)
         {
-            throw new NotImplementedException();
+            return entry.Substring(2,2) switch {
+                "cd" => TryChangeDirectory(entry.Substring(5)),
+                _ => true
+            };
         }
+
+        private bool TryChangeDirectory(string folderName)
+        {
+            Func<Folder?,bool> assignCurrentFolder = (folder) =>
+            {
+                if (folder is null) return false;
+                _currentFolder = folder;
+                return true;
+            };
+
+            Func<string,bool> tryAssignCurrentFolder = (folderName) =>
+            {
+                if (_currentFolder.Folders.TryGetValue(folderName, out var selectedFolder))
+                    return assignCurrentFolder(selectedFolder);
+                return false;
+            };
+
+            return folderName switch {
+                ".." => assignCurrentFolder(_currentFolder.Parent),
+                "/" => assignCurrentFolder(_root),
+                _ => tryAssignCurrentFolder(folderName)
+            };
+        }
+
         private bool TryParseFileEntry(string entry)
         {
             decimal size = 0;

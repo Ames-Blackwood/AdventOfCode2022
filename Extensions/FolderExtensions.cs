@@ -17,7 +17,7 @@ namespace Advent.Extensions
         public static decimal GetSize(this Folder current)
         {
             var fileSize = current.Files.Values.Sum();
-            var folderSize = current.Folders.Select(i => i.GetSize()).Sum();
+            var folderSize = current.Folders.Select(i => i.Value.GetSize()).Sum();
 
             return fileSize + folderSize;
         }
