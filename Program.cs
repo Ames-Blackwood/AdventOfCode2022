@@ -3,6 +3,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Linq;
+using Advent.Logic;
+using Advent.Extensions;
+using Advent.Models;
 
 var host = CreateHostBuilder(args).Build();
 
@@ -16,6 +19,7 @@ static IHostBuilder CreateHostBuilder(string[] args)
         .ConfigureServices(
             (_, services) => services
                 .AddSingleton<Application, Application>()
+                .AddSingleton<ExampleLogic, ExampleLogic>()
         );
 }
 
@@ -32,9 +36,11 @@ static class Config
 class Application
 {
     private ILogger<Application> _logger;
-    public Application(ILogger<Application> logger)
+    private ExampleLogic _exampleLogic;
+    public Application(ILogger<Application> logger, ExampleLogic exampleLogic)
     {
         _logger = logger;
+        _exampleLogic = exampleLogic;
     }
 
     public void Process()
@@ -42,32 +48,16 @@ class Application
         string dataFile = Config.TestData ? @"./IO/testinput.txt" : @"./IO/input.txt";
         _logger.LogInformation($"TestData: {Config.TestData}");
         _logger.LogInformation($"Data file to use: {dataFile}");
+        string[] lines = System.IO.File.ReadAllLines(dataFile);
+        Decimal total = 0;
+        List<string> buffer = new List<string>();
         
-        StreamReader reader = new StreamReader(dataFile);
-
-        const int matchSize = 14;
-        int position = 0;
-        var markerFound = false;        
-        List<char> evalList = new List<char>();
-        var listCount = 0;
-
-        while (!markerFound && reader.Peek() >= 0)
+        foreach (var line in lines)
         {
-            position++;
-            evalList.Add((char)reader.Read());
-            listCount = evalList.Count();
-            if (listCount >= matchSize)
-            {
-                if (listCount > matchSize) evalList.RemoveRange(0,listCount-matchSize);
-                if (evalList.Distinct().Count() == matchSize ) markerFound = true;
-            }
+            total += (Decimal) 1;
         }
-
-        reader.Close();
-
-        if (!markerFound) throw new Exception("Marker could not be found.");
-
-        Console.WriteLine($"The first start-of-packet marker is at \"{position}\".");
+        
+        Console.WriteLine($"The result is {total}.");
         Console.Write("Press any key to exit.");
         try 
         {
