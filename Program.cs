@@ -48,16 +48,17 @@ class Application
         string dataFile = Config.TestData ? @"./IO/testinput.txt" : @"./IO/input.txt";
         _logger.LogInformation($"TestData: {Config.TestData}");
         _logger.LogInformation($"Data file to use: {dataFile}");
-        string[] lines = System.IO.File.ReadAllLines(dataFile);
-        Decimal total = 0;
-        List<string> buffer = new List<string>();
-        
-        foreach (var line in lines)
+
+        StreamReader reader = new StreamReader(dataFile);
+
+        while (reader.Peek() >= 0)
         {
-            total += (Decimal) 1;
+            _ = (char)reader.Read();
         }
-        
-        Console.WriteLine($"The result is {total}.");
+
+        reader.Close();
+
+        Console.WriteLine($"The result is {0}.");
         Console.Write("Press any key to exit.");
         try 
         {
