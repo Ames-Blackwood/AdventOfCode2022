@@ -4,7 +4,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using Advent.Logic;
-using Advent.Extensions;
 using Advent.Models;
 
 var host = CreateHostBuilder(args).Build();
@@ -19,7 +18,7 @@ static IHostBuilder CreateHostBuilder(string[] args)
         .ConfigureServices(
             (_, services) => services
                 .AddSingleton<Application, Application>()
-                .AddSingleton<ExampleLogic, ExampleLogic>()
+                .AddSingleton<FileSystemLogic, FileSystemLogic>()
         );
 }
 
@@ -36,11 +35,11 @@ static class Config
 class Application
 {
     private ILogger<Application> _logger;
-    private ExampleLogic _exampleLogic;
-    public Application(ILogger<Application> logger, ExampleLogic exampleLogic)
+    private FileSystemLogic _FileSystemLogic;
+    public Application(ILogger<Application> logger, FileSystemLogic FileSystemLogic)
     {
         _logger = logger;
-        _exampleLogic = exampleLogic;
+        _FileSystemLogic = FileSystemLogic;
     }
 
     public void Process()
