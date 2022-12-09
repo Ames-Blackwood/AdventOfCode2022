@@ -45,6 +45,7 @@ class Application
         
         StreamReader reader = new StreamReader(dataFile);
 
+        const int matchSize = 4;
         int position = 0;
         var markerFound = false;        
         List<char> evalList = new List<char>();
@@ -55,9 +56,9 @@ class Application
             position++;
             evalList.Add((char)reader.Read());
             listCount = evalList.Count();
-            if (listCount >= 4)
+            if (listCount >= matchSize)
             {
-                if (listCount > 4) evalList.RemoveRange(0,listCount-4);
+                if (listCount > matchSize) evalList.RemoveRange(0,listCount-matchSize);
                 if (evalList.Distinct().Count() == 4 ) markerFound = true;
             }
         }
