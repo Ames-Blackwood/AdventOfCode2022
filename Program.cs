@@ -45,7 +45,7 @@ class Application
         
         StreamReader reader = new StreamReader(dataFile);
 
-        const int matchSize = 4;
+        const int matchSize = 14;
         int position = 0;
         var markerFound = false;        
         List<char> evalList = new List<char>();
@@ -59,12 +59,14 @@ class Application
             if (listCount >= matchSize)
             {
                 if (listCount > matchSize) evalList.RemoveRange(0,listCount-matchSize);
-                if (evalList.Distinct().Count() == 4 ) markerFound = true;
+                if (evalList.Distinct().Count() == matchSize ) markerFound = true;
             }
         }
 
         reader.Close();
-        
+
+        if (!markerFound) throw new Exception("Marker could not be found.");
+
         Console.WriteLine($"The first start-of-packet marker is at \"{position}\".");
         Console.Write("Press any key to exit.");
         try 
