@@ -6,7 +6,7 @@ namespace Advent.Extensions
     {
         public static bool TryAddFolder(this Folder current, string newFolderName)
         {
-            return current.Folders.TryAdd(newFolderName, new Folder { Parent = current });
+            return current.Folders.TryAdd(newFolderName, new Folder { Name = newFolderName, Parent = current });
         }
 
         public static bool TryAddFile(this Folder current, string newFileName, decimal size)

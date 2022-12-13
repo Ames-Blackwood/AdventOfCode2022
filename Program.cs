@@ -48,15 +48,15 @@ class Application
         _logger.LogInformation($"TestData: {Config.TestData}");
         _logger.LogInformation($"Data file to use: {dataFile}");
         string[] lines = System.IO.File.ReadAllLines(dataFile);
-        Decimal total = 0;
-        List<string> buffer = new List<string>();
         
         foreach (var line in lines)
         {
-            total += (Decimal) 1;
+            _FileSystemLogic.TryParseEntry(line);
         }
+
+        Console.WriteLine("The inferred filesystem:");
+        _FileSystemLogic.WriteFolderContents();
         
-        Console.WriteLine($"The result is {total}.");
         Console.Write("Press any key to exit.");
         try 
         {

@@ -9,10 +9,12 @@ namespace Advent.Logic
         private readonly Folder _root;
         private Folder _currentFolder;
         private readonly ILogger<FileSystemLogic> _logger;
+        private const string PREFIX_SPACER = "  ";
+
         public FileSystemLogic(ILogger<FileSystemLogic> logger)
         {
             _logger = logger;
-            _root = new Folder();
+            _root = new Folder {Name = @"/"};
             _currentFolder = _root;
         }
 
@@ -24,6 +26,25 @@ namespace Advent.Logic
                 "d" => TryParseFolderEntry(entry),
                 _ => TryParseFileEntry(entry)
             };
+        }
+
+        public void WriteFolderContents(Folder? folder = null, string prefix = "")
+        {
+            var newPrefix = prefix + PREFIX_SPACER;
+            if (folder is null) folder = _root;
+            if (folder is null) throw new ArgumentNullException(nameof(folder));
+
+            Console.WriteLine($"{prefix}- {folder.Name} (dir)");
+
+            folder.Folders.Keys.ToList().ForEach(key => {
+                if (folder.Folders.TryGetValue(key, out Folder? f) && f is not null)
+                    WriteFolderContents(f, newPrefix);
+            });
+
+            folder.Files.Keys.ToList().ForEach(key => {
+                if (folder.Files.TryGetValue(key, out decimal value))
+                    Console.WriteLine ($"{newPrefix}- {key} (file, size={value})");
+            });
         }
 
         private bool TryParseCommandEntry(string entry)
