@@ -28,6 +28,25 @@ namespace Advent.Logic
             };
         }
 
+        public decimal DepthFirstConstrainedFolderSum(decimal maxSizeToSum, Folder? folder = null)
+        {
+            if (folder is null) folder = _root;
+            if (folder is null) throw new ArgumentNullException(nameof(folder));
+
+            var folders = folder.Folders.Values.ToList();
+            decimal subSum = 0;
+            if (folders.Count > 0) 
+            {
+                folders.ForEach(f=>{
+                    subSum += DepthFirstConstrainedFolderSum(maxSizeToSum, f);
+                });
+            }
+            var size = folder.GetSize();
+            return size <= maxSizeToSum
+                ? size + subSum
+                : subSum;
+        }
+
         public void WriteFolderContents(Folder? folder = null, string prefix = "")
         {
             var newPrefix = prefix + PREFIX_SPACER;
