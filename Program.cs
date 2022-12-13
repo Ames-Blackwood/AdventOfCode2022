@@ -57,7 +57,7 @@ class Application
         Console.WriteLine("The inferred filesystem:");
         _FileSystemLogic.WriteFolderContents();
 
-        Console.WriteLine($"The calculated size: {_FileSystemLogic.DepthFirstConstrainedFolderSum(100000)}");
+        Console.WriteLine($"The calculated size: {_FileSystemLogic.FindSpaceForInstall(30000000M - 21618835M)}");
         
         Console.Write("Press any key to exit.");
         try 

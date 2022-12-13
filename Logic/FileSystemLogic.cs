@@ -37,7 +37,7 @@ namespace Advent.Logic
             decimal subSum = 0;
             if (folders.Count > 0) 
             {
-                folders.ForEach(f=>{
+                folders.ForEach(f => {
                     subSum += DepthFirstConstrainedFolderSum(maxSizeToSum, f);
                 });
             }
@@ -46,6 +46,27 @@ namespace Advent.Logic
                 ? size + subSum
                 : subSum;
         }
+
+        public decimal FindSpaceForInstall(decimal minimumSpaceToFind, Folder? folder = null)
+        {
+            if (folder is null) folder = _root;
+            if (folder is null) throw new ArgumentNullException(nameof(folder));
+
+            var folders = folder.Folders.Values.ToList();
+            decimal currentMinimumSize = 0;
+            if (folders.Count > 0)
+            {
+                folders.ForEach(f => {
+                    var subSize = FindSpaceForInstall(minimumSpaceToFind, f);
+                    if (subSize > minimumSpaceToFind && (currentMinimumSize == 0 || subSize < currentMinimumSize)) currentMinimumSize = subSize;
+                });
+            }
+            var currentFolderSize = folder.GetSize();
+            return (currentFolderSize > minimumSpaceToFind && (currentMinimumSize == 0 || currentFolderSize < currentMinimumSize))
+                ? currentFolderSize
+                : currentMinimumSize;
+        }
+
 
         public void WriteFolderContents(Folder? folder = null, string prefix = "")
         {
