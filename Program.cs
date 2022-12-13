@@ -4,6 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using Advent.Logic;
+using Advent.Extensions;
 using Advent.Models;
 
 var host = CreateHostBuilder(args).Build();
@@ -57,7 +58,11 @@ class Application
         Console.WriteLine("The inferred filesystem:");
         _FileSystemLogic.WriteFolderContents();
 
-        Console.WriteLine($"The calculated size: {_FileSystemLogic.FindSpaceForInstall(30000000M - 21618835M)}");
+        decimal spaceNeeded = 30000000M;
+        decimal totalSpace = 70000000M;
+        decimal currentlyUsedSpace = _FileSystemLogic.Root.GetSize();
+        decimal minimumSpaceToFind = currentlyUsedSpace - (totalSpace-spaceNeeded);
+        Console.WriteLine($"The calculated size: {_FileSystemLogic.FindSpaceForInstall(minimumSpaceToFind)}");
         
         Console.Write("Press any key to exit.");
         try 

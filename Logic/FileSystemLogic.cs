@@ -1,12 +1,14 @@
 using Advent.Extensions;
 using Advent.Models;
 using Microsoft.Extensions.Logging;
+using System.Linq;
 
 namespace Advent.Logic 
 {
     public class FileSystemLogic 
     {
         private readonly Folder _root;
+        public Folder Root { get => _root; }
         private Folder _currentFolder;
         private readonly ILogger<FileSystemLogic> _logger;
         private const string PREFIX_SPACER = "  ";
@@ -53,13 +55,10 @@ namespace Advent.Logic
             if (folder is null) throw new ArgumentNullException(nameof(folder));
 
             var folders = folder.Folders.Values.ToList();
-            decimal currentMinimumSize = 0;
+            var currentMinimumSize = 0M;
             if (folders.Count > 0)
             {
-                folders.ForEach(f => {
-                    var subSize = FindSpaceForInstall(minimumSpaceToFind, f);
-                    if (subSize > minimumSpaceToFind && (currentMinimumSize == 0 || subSize < currentMinimumSize)) currentMinimumSize = subSize;
-                });
+                currentMinimumSize = folders.Select(f => FindSpaceForInstall(minimumSpaceToFind, f)).Where(i => i > minimumSpaceToFind).MinSafe().Min();
             }
             var currentFolderSize = folder.GetSize();
             return (currentFolderSize > minimumSpaceToFind && (currentMinimumSize == 0 || currentFolderSize < currentMinimumSize))
